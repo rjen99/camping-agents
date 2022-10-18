@@ -1,0 +1,9 @@
+# Virtual environment folder
+.venv/
+
+# Practice files
+test.py
+
+# Larger documents/data files
+*.pptx
+*.docx
