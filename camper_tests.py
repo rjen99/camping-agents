@@ -13,17 +13,17 @@ if campground[x,y] == 0:
 
 #print(campground)
 
-#print("running test code")
-#test_model = Campground.Campground(10,5,5)
-#for i in range(10):
-#    test_model.step()
-#    print(test_model.campground)
+print("running test code")
+test_model = Campground.Campground(10,5,5)
+for i in range(10):
+    test_model.step()
+    print(test_model.campground)
 #
 
-test_array = np.array([[1,0,0,1],[2,1,1,2],[3,2,2,3],[4,3,3,4]])
-print(test_array)
-locs = np.transpose(np.where(test_array>=3))
-print(locs)
-loc_dist = np.sum(locs,1)
-closest = locs[np.where(loc_dist==np.min(loc_dist))][0]
-print(closest)
+#test_array = np.array([[1,0,0,1],[2,1,1,2],[3,2,2,3],[4,3,3,4]])
+#print(test_array)
+#locs = np.transpose(np.where(test_array>=3))
+#print(locs)
+#loc_dist = np.sum(locs,1)
+#closest = locs[np.where(loc_dist==np.min(loc_dist))][0]
+#print(closest)

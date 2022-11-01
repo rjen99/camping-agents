@@ -1,5 +1,7 @@
-# Virtual environment folder
+# Virtual environment folder etc
 .venv/
+*.pyc
+model/__pycache__/
 
 # Practice files
 test.py

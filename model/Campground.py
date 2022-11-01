@@ -10,6 +10,7 @@ class Campground(mesa.Model):
         self.width = width
         self.height = height
         self.campground = np.zeros((width, height))
+        self.closest_dist_matrix = closest_distance(self.campground, dist='manhattan')
         self.schedule = mesa.time.RandomActivation(self)
 
         for i in range(1, self.num_agents+1):

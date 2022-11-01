@@ -29,7 +29,7 @@ def closest_distance(campground, dist='manhattan'):
                     distance = np.sqrt(np.sum(np.subtract((i,j),location)**2))   
                 elif dist == 'manhattan':
                     # calculate manhattan distance
-                    distance = np.sum(np.subtract((i,j),location))
+                    distance = np.sum(abs(np.subtract((i,j),location)))
                 
                 # current camper is closer than previous ones, update the array
                 if distance < closest_dist_matrix[i,j]:
@@ -48,10 +48,14 @@ def find_closest(closest_dist_matrix, tol=3):
          current camper's tolerated distance (doesn't want to camp any closer to another camper)
     Output
     ------
-    closest: list/co-ordinates
+    closest: tuple/co-ordinates
              co-ordinates of the closest space that meets the tolerance
     """
     valid_locations = np.transpose(np.where(closest_dist_matrix>=tol))
+    if not np.any(valid_locations):
+        return None
+    #print(closest_dist_matrix)
+    #print(valid_locations)
     location_dist = np.sum(valid_locations,1)
     closest = valid_locations[np.where(location_dist==np.min(location_dist))][0]
-    return closest
+    return tuple(closest)
