@@ -13,9 +13,12 @@ class Campground(mesa.Model):
         self.closest_dist_matrix = closest_distance(self.campground, dist='manhattan')
         self.schedule = mesa.time.RandomActivation(self)
 
+        self.campground_record = np.zeros((width, height,1))
         for i in range(1, self.num_agents+1):
             a = Camper(i, self)
             self.schedule.add(a)
     
     def step(self):
         self.schedule.step()
+        #print(self.campground)
+        self.campground_record = np.dstack([self.campground_record, self.campground])

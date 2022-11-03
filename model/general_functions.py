@@ -50,12 +50,19 @@ def find_closest(closest_dist_matrix, tol=3):
     ------
     closest: tuple/co-ordinates
              co-ordinates of the closest space that meets the tolerance
+    ordered_locations: list of [tuple, int]
+                       list of all locations meeting the tolerance and their distance. Ordered by distance
     """
     valid_locations = np.transpose(np.where(closest_dist_matrix>=tol))
     if not np.any(valid_locations):
         return None
     #print(closest_dist_matrix)
-    #print(valid_locations)
-    location_dist = np.sum(valid_locations,1)
-    closest = valid_locations[np.where(location_dist==np.min(location_dist))][0]
-    return tuple(closest)
+    
+    location_dist = np.transpose(np.sum(valid_locations,1))
+
+    ordered_locations = []
+    for i in range(len(valid_locations)):
+        ordered_locations.append([tuple(valid_locations[i]), location_dist[i]])
+    ordered_locations.sort(key=lambda x:x[1])
+    
+    return ordered_locations
