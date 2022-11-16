@@ -16,19 +16,31 @@ if campground[x,y] == 0:
 
 #print(campground)
 
+height = 50
+width = 50
+num_campers = 100
+num_steps = 500
+
 print("running test code")
-test_model = Campground.Campground(15,10,10)
-for i in range(10):
+test_model = Campground.Campground(num_campers,height,width)
+
+for i in range(num_steps):
+    print("Step", i,"\n--------")
     test_model.step()
     #print(test_model.campground)
 
 #print(test_model.campground_record[:,:,0])
-#print(test_model.campground_record[:,:,9])
+print(test_model.campground_record[:,:,-1])
 
+filename = "shape_{0!s}_{1!s}_campers_{2!s}_2_3_step_{3!s}.npy".format(height,width,num_campers,num_steps)
+np.save(filename, test_model.campground_record)
+print(test_model.closest_dist_matrix)
+for i in test_model.schedule.agents:
+    print("Camper", i.unique_id, ":", i.happiness)
 fig, ax = plt.subplots()
 
 ims = []
-for i in range(10):
+for i in range(num_steps):
     curr_im = test_model.campground_record[:,:,i]
     curr_im[np.where(curr_im>=1)] = 1
     im = ax.imshow(curr_im, animated=True)

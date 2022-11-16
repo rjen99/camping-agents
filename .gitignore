@@ -9,3 +9,4 @@ test.py
 # Larger documents/data files
 *.pptx
 *.docx
+*.npy
