@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 
-
 campground = np.zeros((5,5))
 x=2
 y=2
@@ -16,13 +15,13 @@ if campground[x,y] == 0:
 
 #print(campground)
 
-height = 50
+height = 55
 width = 50
-num_campers = 100
-num_steps = 500
+num_campers = 238
+num_steps = 750
 
 print("running test code")
-test_model = Campground.Campground(num_campers,height,width)
+test_model = Campground.Campground(num_campers,height,width, manual=False)
 
 for i in range(num_steps):
     print("Step", i,"\n--------")
@@ -32,11 +31,15 @@ for i in range(num_steps):
 #print(test_model.campground_record[:,:,0])
 print(test_model.campground_record[:,:,-1])
 
-filename = "shape_{0!s}_{1!s}_campers_{2!s}_2_3_step_{3!s}.npy".format(height,width,num_campers,num_steps)
+filename = "shape_{0!s}_{1!s}_campers_{2!s}_2_3_step_{3!s}_3.npy".format(height,width,num_campers,num_steps)
+filename_hap = "shape_{0!s}_{1!s}_campers_{2!s}_2_3_step_{3!s}_3_happiness.npy".format(height,width,num_campers,num_steps)
 np.save(filename, test_model.campground_record)
 print(test_model.closest_dist_matrix)
+camper_happiness = []
 for i in test_model.schedule.agents:
     print("Camper", i.unique_id, ":", i.happiness)
+    camper_happiness.append(i.happiness)
+np.save(filename_hap,camper_happiness)
 fig, ax = plt.subplots()
 
 ims = []

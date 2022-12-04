@@ -12,17 +12,18 @@ class Camper(mesa.Agent):
         self.checked_spaces = []
         self.width = 2      # shorter edge
         self.height = 3     # longer edge
-        self.tol = 6
+        self.tol = 3
         self.given_up = False
         print("Camper", self.unique_id)
 
     def step(self):
         
-        # if not already placed
+        # if the camper couldn't find a space with the lowest tolerance, they give up/go home
         if self.given_up:
             print("Camper", self.unique_id, "has given up")
             return
         
+        # if not already placed
         if not self.location:
             print("Camper", self.unique_id, ":", self.tol, ":", self.location)
             valid_locations = find_closest(self.model.closest_dist_matrix, self.tol)
@@ -114,24 +115,3 @@ class Camper(mesa.Agent):
             self.happiness += 5
             print("Camper", self.unique_id, "placed at", self.occupied_spaces)
 
-            # check spaces below and to the right for more spaces with the correct tolerances
-            #if self.height > 1:
-            #    down = (self.location[0]+1,self.location[1])
-            #    right = (self.location[0],self.location[1]+1)
-            #    
-            #    if down[0] != self.model.height:
-            #        self.occupied_spaces = [self.location,down]
-            #        for loc in self.occupied_spaces:
-            #            self.model.campground[loc] = self.unique_id
-            #        self.model.closest_dist_matrix = closest_distance(self.model.campground, dist='manhattan')
-            #        print("Camper", self.unique_id, "placed at", self.occupied_spaces)
-
-            #    elif right[1] != self.model.width:
-            #        self.occupied_spaces = [self.location,right]
-            #        for loc in self.occupied_spaces:
-            #            self.model.campground[loc] = self.unique_id
-            #        self.model.closest_dist_matrix = closest_distance(self.model.campground, dist='manhattan')
-            #        print("Camper", self.unique_id, "placed at", self.occupied_spaces)
-            #    
-            #    else:
-            #        print("No space :(")

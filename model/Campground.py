@@ -1,11 +1,12 @@
 import mesa
 import numpy as np
 from model.Camper import Camper
+from model.manual_organisation import ManualCamper
 from model.general_functions import closest_distance
 
 class Campground(mesa.Model):
 
-    def __init__(self, N, width, height):
+    def __init__(self, N, width, height, manual=False):
         self.num_agents = N
         self.width = width
         self.height = height
@@ -14,9 +15,14 @@ class Campground(mesa.Model):
         self.schedule = mesa.time.RandomActivation(self)
 
         self.campground_record = np.zeros((width, height,1))
-        for i in range(1, self.num_agents+1):
-            a = Camper(i, self)
-            self.schedule.add(a)
+        if manual:
+            for i in range(1, self.num_agents+1):
+                a = ManualCamper(i, self)
+                self.schedule.add(a)
+        else:
+            for i in range(1, self.num_agents+1):
+                a = Camper(i, self)
+                self.schedule.add(a)
     
     def step(self):
         self.schedule.step()
