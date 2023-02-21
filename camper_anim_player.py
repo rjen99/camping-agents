@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-filename = "shape_50_50_campers_100_2_3_step_500_manual.npy"
+filename = "shape_55_50_campers_200_2_3_step_750_3.npy"
 campground_record = np.load(filename)
 height = 50
 width = 50

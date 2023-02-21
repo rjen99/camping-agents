@@ -66,3 +66,34 @@ def find_closest(closest_dist_matrix, tol=3):
     ordered_locations.sort(key=lambda x:x[1])
     
     return ordered_locations
+
+def create_tol_neighbourhood(max_tol):
+    tol_dict = dict()
+    for i in range(2,max_tol+1):
+        tol_dict[i]=[]
+
+    upper_left =  [[ 1,0], [0,-1]]
+    upper_right = [[ 1,0], [0, 1]]
+    lower_left =  [[-1,0], [0,-1]]
+    lower_right = [[-1,0], [0, 1]]
+    corners = [upper_left, upper_right, lower_left, lower_right]
+
+    old_distance = [[1,0], [0,-1]]
+    for k in range(4):
+        corner = corners[k]
+        old_distance = corners[k]
+        for i in range(2,max_tol+1):
+            new_dist = []
+            for direction in corner:
+                for distance in old_distance:
+                    new_dist.append(np.add(direction, distance))
+            tol_dict[i].append(np.unique(new_dist,axis=0))
+            old_distance = new_dist
+    
+    return tol_dict
+
+def within_bounds(height,width, co_ord):
+    if co_ord[0] >= 0 and co_ord[0] < height and co_ord[1] >= 0 and co_ord[1] < width:
+        return True
+    else:
+        return False

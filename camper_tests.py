@@ -3,45 +3,70 @@ from model import Camper, Campground
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-
-campground = np.zeros((5,5))
-x=2
-y=2
-unique_id = 2
-if campground[x,y] == 0:
-    location = (x,y)
-    campground[x-1:x+2,y-1:y+2] = -1     # Set surrounding area to -1 (not campable on)
-    campground[x,y] = unique_id
-
-#print(campground)
-
+# Set campground info
 height = 55
 width = 50
-num_campers = 238
+num_campers = 200
 num_steps = 750
 
-print("running test code")
+print("--Running Test Code--")
+
+# Create campground and campers
 test_model = Campground.Campground(num_campers,height,width, manual=False)
 
+camper_types = np.array([[2,3,6,0.5],[1,2,3,0.5]])
+test_model.init_campers(camper_types)
+
+# Run scenario
 for i in range(num_steps):
     print("Step", i,"\n--------")
     test_model.step()
-    #print(test_model.campground)
 
-#print(test_model.campground_record[:,:,0])
+# Print last layout
 print(test_model.campground_record[:,:,-1])
 
+# Save info for plotting/visualing
 filename = "shape_{0!s}_{1!s}_campers_{2!s}_2_3_step_{3!s}_3.npy".format(height,width,num_campers,num_steps)
-filename_hap = "shape_{0!s}_{1!s}_campers_{2!s}_2_3_step_{3!s}_3_happiness.npy".format(height,width,num_campers,num_steps)
 np.save(filename, test_model.campground_record)
-print(test_model.closest_dist_matrix)
-camper_happiness = []
-for i in test_model.schedule.agents:
-    print("Camper", i.unique_id, ":", i.happiness)
-    camper_happiness.append(i.happiness)
-np.save(filename_hap,camper_happiness)
-fig, ax = plt.subplots()
 
+print(test_model.closest_dist_matrix)
+
+filename_hap = "shape_{0!s}_{1!s}_campers_{2!s}_2_3_step_{3!s}_3_happiness.npy".format(height,width,num_campers,num_steps)
+camper_happiness = []
+camper_1 = []
+camper_2 = []
+for camper in test_model.schedule.agents:
+    if camper.max_tol == 6:
+        camper_1.append([camper.unique_id, camper.happiness, camper.time_placed])
+    else:
+        camper_2.append([camper.unique_id, camper.happiness, camper.time_placed])
+
+    print("Camper", camper.unique_id, ":", camper.happiness)
+    camper_happiness.append(camper.happiness)
+
+camper_1 = np.array(camper_1)
+camper_2 = np.array(camper_2)
+
+count_1 = len(camper_1)
+hap_mean_1 = np.mean(camper_1[:,1])
+time_mean_1 = np.mean(camper_1[:,2])
+
+count_2 = len(camper_2)
+hap_mean_2 = np.mean(camper_2[:,1])
+time_mean_2 = np.mean(camper_2[:,2])
+
+print("Family\n------")
+print("Mean Happiness:", hap_mean_1)
+print("Mean Time Placed:", time_mean_1)
+
+print("\nTeenagers\n---------")
+print("Mean Happiness:", hap_mean_2)
+print("Mean Time Placed:", time_mean_2)
+
+np.save(filename_hap,camper_happiness)
+
+# Animate tents being placed
+fig, ax = plt.subplots()
 ims = []
 for i in range(num_steps):
     curr_im = test_model.campground_record[:,:,i]
@@ -53,12 +78,3 @@ for i in range(num_steps):
 
 ani = animation.ArtistAnimation(fig, ims, interval=50, blit=True, repeat_delay=1000)
 plt.show()
-
-
-#test_array = np.array([[1,0,0,1],[2,1,1,2],[3,2,2,3],[4,3,3,4]])
-#print(test_array)
-#locs = np.transpose(np.where(test_array>=3))
-#print(locs)
-#loc_dist = np.sum(locs,1)
-#closest = locs[np.where(loc_dist==np.min(loc_dist))][0]
-#print(closest)
