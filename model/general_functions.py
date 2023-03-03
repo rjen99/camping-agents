@@ -37,7 +37,7 @@ def closest_distance(campground, dist='manhattan'):
     
     return closest_dist_matrix
 
-def find_closest(closest_dist_matrix, tol=3):
+def find_closest(closest_dist_matrix, tol=3, priority='closest'):
     """
     Find the closest space that meets the camper's tolerated distance
     Parameters
@@ -46,6 +46,8 @@ def find_closest(closest_dist_matrix, tol=3):
                          array of each square's distance from the closest camper
     tol: int
          current camper's tolerated distance (doesn't want to camp any closer to another camper)
+    priority: str
+              whether to order list by 'closest' space or 'largest' space (highest distance from closest tent)
     Output
     ------
     closest: tuple/co-ordinates
@@ -54,15 +56,19 @@ def find_closest(closest_dist_matrix, tol=3):
                        list of all locations meeting the tolerance and their distance. Ordered by distance
     """
     valid_locations = np.transpose(np.where(closest_dist_matrix>=tol))
+
     if not np.any(valid_locations):
         return None
     #print(closest_dist_matrix)
     
-    location_dist = np.transpose(np.sum(valid_locations,1))
+    if priority == 'closest':
+        order_by_values = np.transpose(np.sum(valid_locations,1))
+    elif priority == 'largest':
+        order_by_values = [closest_dist_matrix[tuple(i)] for i in valid_locations]
 
     ordered_locations = []
     for i in range(len(valid_locations)):
-        ordered_locations.append([tuple(valid_locations[i]), location_dist[i]])
+        ordered_locations.append([tuple(valid_locations[i]), order_by_values[i]])
     ordered_locations.sort(key=lambda x:x[1])
     
     return ordered_locations
