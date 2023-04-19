@@ -2,13 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-filename = "shape_25_20_campers_100_2_3_step_500_3.npy"
+filename = "data/shape_50_50_campers_100_centre_campsite.npy"
 campground_record = np.load(filename)
 height = 50
 width = 50
 
 num_campers = 100
-num_steps = 500
+num_steps = 200
 
 fig, ax = plt.subplots()
 
